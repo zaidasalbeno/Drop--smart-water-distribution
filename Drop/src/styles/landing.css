@@ -1,0 +1,338 @@
+/* Public landing and authentication styles. */
+﻿.landing-header {
+  background: rgba(255, 255, 255, 0.88) !important;
+  color: #173b40 !important;
+  border-bottom: 1px solid #e9efed;
+  backdrop-filter: blur(14px);
+}
+.landing-header .MuiToolbar-root {
+  max-width: 1240px;
+  width: 100%;
+  margin: auto;
+  min-height: 76px;
+  padding: 0 28px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font:
+    800 25px Manrope,
+    sans-serif;
+  letter-spacing: -1.4px;
+  color: #164c50;
+}
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 37px;
+  height: 37px;
+  border-radius: 12px;
+  background: #176f88;
+  color: white;
+  font-size: 23px;
+  letter-spacing: -2px;
+}
+.brand-period {
+  color: #d9a165;
+}
+.brand small {
+  display: block;
+  font:
+    700 8px 'DM Sans',
+    sans-serif;
+  letter-spacing: 1.7px;
+  color: #7d9493;
+  margin-top: -2px;
+}
+.header-links {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 34px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.header-links a:hover {
+  color: #176f88;
+}
+.landing {
+  max-width: 1240px;
+  margin: auto;
+  padding: 0 28px;
+  color: #173b40;
+}
+.landing-copy {
+  min-height: 450px;
+  padding: 90px 0 54px;
+  max-width: 510px;
+  position: relative;
+  z-index: 1;
+}
+.landing-kicker,
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 1.4px;
+  font-weight: 700;
+  color: #678080;
+}
+.landing-kicker i,
+.live-status i,
+.health-items i {
+  display: inline-block;
+  background: #30a780;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-right: 7px;
+}
+.landing h1,
+.auth-side h1 {
+  font:
+    750 clamp(54px, 7vw, 82px)/0.99 Manrope,
+    sans-serif;
+  letter-spacing: -5px;
+  margin: 23px 0;
+  color: #163e42;
+}
+.landing h1 em,
+.auth-side h1 em {
+  font-style: normal;
+  color: #176f88;
+}
+.landing-copy > p {
+  color: #6f8587;
+  line-height: 1.8;
+  font-size: 15px;
+  max-width: 440px;
+}
+.landing-ctas {
+  margin-top: 26px;
+}
+.landing-ctas button {
+  min-width: 128px;
+}
+.landing-ctas button span {
+  margin-left: 12px;
+}
+.landing-trust {
+  margin-top: 38px;
+  color: #718688;
+  font-size: 11px;
+}
+.landing-trust span {
+  color: #d5974d;
+  font-size: 15px;
+  margin-right: 6px;
+}
+.hero-art {
+  position: absolute;
+  right: max(calc((100vw - 1240px) / 2 + 42px), 7vw);
+  top: 140px;
+  width: 470px;
+  height: 410px;
+  border-radius: 48% 52% 48% 52%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    #e1f3ef 0,
+    #edf6f2 44%,
+    rgba(232, 244, 240, 0.15) 71%
+  );
+  display: grid;
+  place-items: center;
+}
+.water-drop {
+  width: 170px;
+  height: 206px;
+  border-radius: 60% 45% 60% 45%;
+  transform: rotate(45deg);
+  background: linear-gradient(145deg, #49aaa5, #08777f 70%);
+  box-shadow:
+    inset -18px -16px 30px #075c67,
+    0 30px 50px #4caaa34a;
+  color: #ffffff75;
+  display: grid;
+  place-items: center;
+  font-size: 50px;
+  padding-bottom: 50px;
+}
+.landing-strip {
+  border-top: 1px solid #e3ebe8;
+  border-bottom: 1px solid #e3ebe8;
+  display: flex;
+  align-items: center;
+  gap: 75px;
+  padding: 24px 4px;
+}
+.landing-strip > div b {
+  font: 700 26px Manrope;
+  color: #17454a;
+}
+.landing-strip > div b span {
+  font-size: 18px;
+  color: #176f88;
+}
+.landing-strip > div small {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: #819291;
+}
+.landing-strip > p {
+  margin-left: auto;
+  font-size: 11px;
+  color: #728584;
+  line-height: 1.7;
+}
+.landing-strip > p b {
+  color: #176f88;
+}
+.landing-bottom {
+  height: 74px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.landing-bottom > b {
+  font: 800 16px Manrope;
+}
+.landing-bottom > b span {
+  color: #d59a58;
+}
+.landing-bottom small {
+  font-size: 8px;
+  color: #829391;
+  letter-spacing: 1px;
+}
+.landing-bottom small:last-child {
+  margin-left: auto;
+}
+.auth-layout {
+  min-height: calc(100vh - 76px);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #f4f8f7;
+}
+.auth-side {
+  padding: 90px max(7vw, 40px);
+  background: #e7f2ee;
+  position: relative;
+  overflow: hidden;
+}
+.auth-side > span {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: #62807d;
+  font-weight: 700;
+}
+.auth-side h1 {
+  font-size: 70px;
+  margin-top: 70px;
+}
+.auth-side > p {
+  color: #708684;
+  max-width: 340px;
+  line-height: 1.8;
+}
+.auth-deco {
+  position: absolute;
+  bottom: -60px;
+  right: 5%;
+  font-size: 220px;
+  color: #c7e5dd;
+  transform: rotate(-20deg);
+}
+.auth-deco span {
+  font-size: 80px;
+}
+.auth-card {
+  align-self: center;
+  justify-self: center;
+  width: min(440px, calc(100% - 48px));
+  padding: 32px !important;
+  border: 1px solid #e6eeeb;
+}
+.back-link {
+  font-size: 12px;
+  color: #6e8382;
+}
+.auth-card h2 {
+  font: 700 26px Manrope;
+  margin: 26px 0 5px;
+}
+.auth-card > p {
+  font-size: 13px;
+  color: #849392;
+  margin-bottom: 22px;
+}
+.auth-card form {
+  margin-top: 20px;
+}
+.demo-box {
+  margin-top: 25px;
+  background: #f5f8f6;
+  border: 1px solid #e9efec;
+  border-radius: 10px;
+  padding: 12px;
+}
+.demo-box > b {
+  font-size: 9px;
+  letter-spacing: 1px;
+  display: flex;
+  justify-content: space-between;
+}
+.demo-box > b span {
+  font-weight: 500;
+  color: #859593;
+  letter-spacing: 0.2px;
+}
+.demo-box button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  gap: 10px;
+  border: 0;
+  background: transparent;
+  padding: 10px 2px;
+  cursor: pointer;
+  color: #29484b;
+}
+.demo-box button + button {
+  border-top: 1px solid #e8eeeb;
+}
+.demo-box button > span {
+  font-size: 11px;
+  font-weight: 600;
+}
+.demo-box button small {
+  display: block;
+  font-weight: 400;
+  color: #83918f;
+  margin-top: 2px;
+}
+.demo-box button > b {
+  margin-left: auto;
+}
+.role-dot {
+  width: 8px;
+  height: 8px;
+  background: #43a889;
+  border-radius: 50%;
+}
+.role-dot.supplier {
+  background: #e6a050;
+}
+.role-dot.admin {
+  background: #7185b6;
+}
+.auth-switch {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 12px;
+  color: #718482;
+}
+.auth-switch a {
+  color: #176f88;
+  font-weight: 700;
+}

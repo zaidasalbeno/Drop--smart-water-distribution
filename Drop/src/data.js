@@ -1,6 +1,23 @@
-export const initialData = { users: [], tanks: [], suppliers: [], requests: [], complaints: [] };
+// Local demo account for reviewing the admin workspace. This is not a production auth system.
+export const initialData = {
+  users: [
+    {
+      id: 'admin-demo',
+      name: 'DROP Admin',
+      email: 'admin@drop.local',
+      password: 'DropAdmin2026!',
+      role: 'admin',
+      phone: '',
+      address: '',
+      active: true,
+    },
+  ],
+  tanks: [],
+  suppliers: [],
+  requests: [],
+  complaints: [],
+};
 
-// Safe ordering: lowest tank percentage, highest urgency, then oldest request.
 export function prioritizeRequests(requests, tanks) {
   const percent = (request) => {
     const tank = tanks.find((item) => item.id === request.tankId);
@@ -28,7 +45,6 @@ export function prioritizeRequests(requests, tanks) {
   );
 }
 
-// Exclude unavailable/undersized suppliers, then rank by cost and distance.
 export function matchSuppliers(suppliers, gallons) {
   const amount = Number(gallons);
   if (!Number.isFinite(amount) || amount <= 0) return [];

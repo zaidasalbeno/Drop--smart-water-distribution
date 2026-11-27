@@ -1,29 +1,39 @@
 import { Button, Stack } from '@mui/material';
+import { Link, useLocation } from 'react-router';
+import { useEffect } from 'react';
 import Header from '../../components/Layout/Header';
 
 export function Home() {
+  const location = useLocation();
+  useEffect(() => {
+    if (!location.hash) return;
+    document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  }, [location.hash]);
+
   return (
     <>
       <Header />
       <div className="landing">
-        <div className="landing-copy">
+        <div className="landing-copy" id="how-it-works">
           <span className="landing-kicker">
             <i /> YOUR WATER. YOUR WAY.
           </span>
           <h1>
-            Every drop,
+            Know what’s
             <br />
-            in <em>good hands.</em>
+            in your <em>tank.</em>
           </h1>
           <p>
-            A smarter way to manage your water. Keep an eye on your tanks, find trusted local
-            suppliers, and get deliveries when you need them.
+            Track tank levels, compare local suppliers, and arrange a refill when you need one.
           </p>
           <Stack direction="row" spacing={1.5} className="landing-ctas">
-            <Button variant="contained" size="large" onClick={() => location.assign('/register')}>
+            <Button component={Link} to="/register" variant="contained" size="large">
               Get started <span>↗</span>
             </Button>
-            <Button variant="outlined" size="large" onClick={() => location.assign('/login')}>
+            <Button component={Link} to="/login" variant="outlined" size="large">
               Sign in
             </Button>
           </Stack>
@@ -31,31 +41,10 @@ export function Home() {
             <span>✳</span> Built for households, suppliers, and local administrators
           </div>
         </div>
-        <div className="hero-art">
-          <div className="hero-orbit orbit-a" />
-          <div className="hero-orbit orbit-b" />
-          <div className="water-drop">⌄</div>
-          <div className="hero-floating float-top">
-            <span>◉</span>
-            <div>
-              <b>Tank status</b>
-              <small>Looking good · 78%</small>
-            </div>
-            <div className="tiny-bars">▂ ▄ ▆ ▇</div>
-          </div>
-          <div className="hero-floating float-bottom">
-            <span className="truck-icon">↗</span>
-            <div>
-              <b>Delivery on the way</b>
-              <small>BlueSpring Water · 25 min</small>
-            </div>
-            <i />
-          </div>
-          <div className="art-caption">
-            <span>◉</span> WATER, IN BALANCE <b>✳</b>
-          </div>
+        <div className="hero-art" aria-hidden="true">
+          <span className="water-drop" />
         </div>
-        <div className="landing-strip">
+        <div className="landing-strip" id="network">
           <div>
             <b>Tank tools</b>
             <small>TANK MANAGEMENT</small>

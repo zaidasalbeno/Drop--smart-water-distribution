@@ -1,0 +1,235 @@
+/* Responsive layout rules. */
+.mobile-menu {
+  display: none !important;
+}
+@media (max-width: 1050px) {
+  .hero-art {
+    right: 3vw;
+    width: 380px;
+    transform: scale(0.87);
+    transform-origin: right center;
+  }
+  .landing-copy {
+    max-width: 450px;
+  }
+  .landing-strip {
+    gap: 35px;
+  }
+  .supplier-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 800px) {
+  .desktop-sidebar {
+    display: none;
+  }
+  .main-column {
+    width: 100%;
+    margin: 0;
+  }
+  .mobile-menu {
+    display: inline-flex !important;
+    margin-right: 9px !important;
+  }
+  .topbar .MuiToolbar-root {
+    padding: 0 15px;
+  }
+  .content-wrap {
+    padding: 24px 17px 10px;
+  }
+  .crumb {
+    font-size: 8px;
+  }
+  .live-status {
+    display: none;
+  }
+  .profile-mini {
+    padding-left: 9px;
+  }
+  .profile-mini > div {
+    display: none;
+  }
+  .hero-art {
+    right: -20px;
+    top: 275px;
+    width: 330px;
+    height: 330px;
+    opacity: 0.72;
+    transform: scale(0.75);
+    transform-origin: top right;
+  }
+  .landing-copy {
+    min-height: 600px;
+    padding-top: 70px;
+  }
+  .landing h1 {
+    font-size: 62px;
+  }
+  .landing-copy > p {
+    max-width: 380px;
+  }
+  .landing-trust {
+    max-width: 230px;
+    line-height: 1.7;
+  }
+  .landing-strip {
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  .landing-strip > div {
+    flex: 1;
+    min-width: 95px;
+  }
+  .landing-strip > p {
+    width: 100%;
+    margin: 8px 0 0;
+  }
+  .auth-layout {
+    grid-template-columns: 1fr;
+  }
+  .auth-side {
+    display: none;
+  }
+  .auth-card {
+    margin: 35px auto;
+  }
+  .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  .supplier-grid {
+    grid-template-columns: 1fr;
+  }
+  .page-heading h4 {
+    font-size: 23px;
+  }
+  .health-items {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 520px) {
+  .landing-header .MuiToolbar-root {
+    padding: 0 17px;
+    min-height: 65px;
+  }
+  .header-links {
+    gap: 12px;
+  }
+  .header-links > a:not(:last-of-type) {
+    display: none;
+  }
+  .header-links .MuiButton-root {
+    padding: 7px 10px;
+    font-size: 10px;
+  }
+  .landing {
+    padding: 0 18px;
+  }
+  .landing-copy {
+    padding-top: 58px;
+    min-height: 610px;
+  }
+  .landing h1 {
+    font-size: 56px;
+    letter-spacing: -3px;
+  }
+  .hero-art {
+    top: 330px;
+    right: -65px;
+    transform: scale(0.62);
+    opacity: 0.6;
+  }
+  .landing-ctas button {
+    font-size: 11px;
+    min-width: 110px;
+  }
+  .landing-strip {
+    padding: 18px 0;
+    gap: 8px;
+  }
+  .landing-strip > div b {
+    font-size: 21px;
+  }
+  .landing-strip > div small {
+    font-size: 7px;
+  }
+  .landing-bottom {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .landing-bottom small {
+    font-size: 7px;
+  }
+  .landing-bottom small:last-child {
+    display: none;
+  }
+  .page-heading {
+    align-items: flex-start;
+  }
+  .page-heading .MuiButton-root {
+    font-size: 9px;
+    padding: 7px;
+  }
+  .page-heading h4 {
+    font-size: 21px;
+  }
+  .metric-card .MuiCardContent-root {
+    padding: 12px !important;
+  }
+  .metric-top {
+    font-size: 7px;
+  }
+  .metric-card strong {
+    font-size: 22px;
+  }
+  .panel {
+    padding: 13px !important;
+  }
+  .toolbar-filter .MuiTextField-root {
+    min-width: 0;
+    flex: 1;
+    width: 50%;
+  }
+  .toolbar-filter .MuiInputBase-root {
+    font-size: 10px;
+  }
+  .match-banner {
+    flex-wrap: wrap;
+  }
+  .match-banner .MuiTextField-root {
+    width: 100%;
+  }
+  .tip-banner {
+    flex-wrap: wrap;
+  }
+  .tip-banner button {
+    margin-left: 42px;
+  }
+  .content-wrap footer {
+    font-size: 7px;
+  }
+  .content-wrap footer span {
+    display: none;
+  }
+  .top-actions {
+    gap: 4px;
+  }
+  .top-actions > .MuiButton-root {
+    font-size: 9px;
+  }
+  .timeline > div {
+    width: 70px;
+  }
+  .timeline b {
+    font-size: 8px;
+  }
+  .data-table th {
+    font-size: 7px;
+  }
+  .data-table td {
+    padding: 9px 7px;
+    font-size: 9px;
+  }
+}

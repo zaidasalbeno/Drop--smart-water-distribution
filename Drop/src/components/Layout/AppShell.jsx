@@ -4,23 +4,23 @@ import { Link, Navigate, useLocation, useNavigate } from 'react-router';
 import { useApp } from '../../Hooks/useApp';
 const routes = {
   household: [
-    ['Overview', '/household', '?'],
-    ['My tanks', '/household/tanks', '?'],
-    ['Find suppliers', '/household/suppliers', '?'],
-    ['Delivery requests', '/household/requests', '?'],
-    ['Profile', '/household/profile', '?'],
+    ['Overview', '/household', '⌂'],
+    ['My tanks', '/household/tanks', '▤'],
+    ['Find suppliers', '/household/suppliers', '⌕'],
+    ['Delivery requests', '/household/requests', '↗'],
+    ['Profile', '/household/profile', '○'],
   ],
   supplier: [
-    ['Overview', '/supplier', '?'],
-    ['Incoming requests', '/supplier/requests', '?'],
-    ['Delivery history', '/supplier/history', '?'],
-    ['Business profile', '/supplier/profile', '?'],
+    ['Overview', '/supplier', '⌂'],
+    ['Incoming requests', '/supplier/requests', '↙'],
+    ['Delivery history', '/supplier/history', '▤'],
+    ['Business profile', '/supplier/profile', '○'],
   ],
   admin: [
-    ['Overview', '/admin', '?'],
-    ['Users', '/admin/users', '?'],
-    ['Suppliers', '/admin/suppliers', '?'],
-    ['Delivery requests', '/admin/requests', '?'],
+    ['Overview', '/admin', '⌂'],
+    ['Users', '/admin/users', '○'],
+    ['Suppliers', '/admin/suppliers', '◇'],
+    ['Delivery requests', '/admin/requests', '↗'],
     ['Complaints', '/admin/complaints', '!'],
   ],
 };
@@ -32,7 +32,7 @@ export function Guard({ roles, children }) {
   const { user } = useApp();
   const location = useLocation();
   if (!user) return <Navigate to="/login" state={{ from: location.pathname }} replace />;
-  if (!roles.includes(user.role)) return <Navigate to={base[user.role]} replace />;
+  if (!roles.includes(user.role)) return <Navigate to={base[user.role] || '/'} replace />;
   return children;
 }
 
@@ -56,7 +56,7 @@ export function AppFrame({ children }) {
         <Link
           key={path}
           to={path}
-          className={`nav-link ${location.pathname === path ? 'selected' : ''}`}
+          className={`nav-link ${location.pathname === path || (path !== base[user.role] && location.pathname.startsWith(`${path}/`)) ? 'selected' : ''}`}
           onClick={() => setOpen(false)}
         >
           <span className="nav-icon">{icon}</span>

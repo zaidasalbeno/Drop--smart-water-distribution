@@ -12,6 +12,7 @@ import {
 
 export function AdminDashboard() {
   const { data } = useApp();
+  const requestStatuses = ['Pending', 'Accepted', 'In transit', 'Delivered'];
   return (
     <Page title="Network overview" subtitle="A clear view of the whole DROP network.">
       <div className="metric-grid">
@@ -42,25 +43,14 @@ export function AdminDashboard() {
       </div>
       <div className="dashboard-grid">
         <Paper className="panel">
-          <SectionTitle title="Network activity" note="Delivery requests at a glance" />
-          <div className="chart-area">
-            <svg viewBox="0 0 600 140" preserveAspectRatio="none">
-              <path
-                d="M0 110 Q80 90 150 105 T300 65 T450 75 T600 20"
-                fill="none"
-                stroke="#087f8c"
-                strokeWidth="4"
-              />
-            </svg>
-            <div className="chart-x">
-              <span>M</span>
-              <span>T</span>
-              <span>W</span>
-              <span>T</span>
-              <span>F</span>
-              <span>S</span>
-              <span>S</span>
-            </div>
+          <SectionTitle title="Delivery pipeline" note="Requests by current status" />
+          <div className="health-items">
+            {requestStatuses.map((status) => (
+              <span key={status}>
+                {status}
+                <b>{data.requests.filter((request) => request.status === status).length}</b>
+              </span>
+            ))}
           </div>
         </Paper>
         <Paper className="panel">
