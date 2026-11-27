@@ -13,8 +13,8 @@ export default function Header() {
           </span>
         </Link>
         <div className="header-links">
-          <a href="#how-it-works">How it works</a>
-          <a href="#network">Our network</a>
+          <Link to="/#how-it-works">How it works</Link>
+          <Link to="/#network">Our network</Link>
           <Link to="/login">Sign in</Link>
           <Button component={Link} to="/register" variant="contained" size="small">
             Get started ↗

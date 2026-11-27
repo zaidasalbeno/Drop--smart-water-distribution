@@ -1,17 +1,19 @@
 import { LinearProgress } from '@mui/material';
 
 export function TankRow({ tank, onEdit, onDelete }) {
-  const pct = Math.max(
-    0,
-    Math.min(100, Math.round((Number(tank.level) / Number(tank.capacity)) * 100)),
-  );
+  const capacity = Number(tank.capacity);
+  const level = Number(tank.level);
+  const pct =
+    Number.isFinite(level) && Number.isFinite(capacity) && capacity > 0
+      ? Math.max(0, Math.min(100, Math.round((level / capacity) * 100)))
+      : 0;
   return (
     <div className="tank-row">
       <div className="tank-icon">◉</div>
       <div className="tank-info">
         <b>{tank.name}</b>
         <small>
-          {Number(tank.level).toLocaleString()} of {Number(tank.capacity).toLocaleString()} gallons
+          {level.toLocaleString()} of {capacity.toLocaleString()} gallons
         </small>
         <LinearProgress
           variant="determinate"

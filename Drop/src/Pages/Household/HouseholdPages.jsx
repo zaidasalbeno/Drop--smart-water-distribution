@@ -214,12 +214,21 @@ export function Suppliers() {
   const [gallons, setGallons] = useState(500);
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('recommended');
-  const ranked = matchSuppliers(data.suppliers, gallons)
-    .filter((s) => s.name.toLowerCase().includes(search.toLowerCase()))
-    .sort((a, b) =>
-      sort === 'distance' ? a.distance - b.distance : sort === 'rating' ? b.rating - a.rating : 0,
-    );
+  const matches = matchSuppliers(data.suppliers, gallons);
+  const matchIds = new Set(matches.map((supplier) => supplier.id));
+  const ranked = data.suppliers
+    .filter((supplier) => supplier.name.toLowerCase().includes(search.trim().toLowerCase()))
+    .sort((a, b) => {
+      if (sort === 'recommended' && matchIds.has(a.id) !== matchIds.has(b.id))
+        return Number(matchIds.has(b.id)) - Number(matchIds.has(a.id));
+      if (sort === 'distance')
+        return Number(a.distance ?? Infinity) - Number(b.distance ?? Infinity);
+      if (sort === 'rating') return Number(b.rating || 0) - Number(a.rating || 0);
+      return Number(a.price ?? Infinity) - Number(b.price ?? Infinity);
+    });
   const create = (s) => {
+    if (!matchIds.has(s.id))
+      return setNotice('This supplier is not available for that delivery size.', 'error');
     const tank = myTanks[0];
     if (!tank) return setNotice('Add a tank before requesting a delivery.', 'error');
     const req = {
@@ -239,13 +248,16 @@ export function Suppliers() {
   return (
     <Page
       title="Find a supplier"
-      subtitle="Compare trusted local suppliers for your next delivery."
+      subtitle="Browse every local supplier. Check availability and capacity before requesting a delivery."
     >
       <Paper className="match-banner">
         <span>✳</span>
         <div>
           <b>Smart matching, made simple.</b>
-          <small>We rank available suppliers by price and distance for your delivery size.</small>
+          <small>
+            Suppliers that can fill this order appear first. Paused and undersized suppliers remain
+            visible.
+          </small>
         </div>
         <TextField
           label="Delivery size (gal)"
@@ -270,7 +282,7 @@ export function Suppliers() {
         </Select>
       </div>
       <div className="supplier-grid">
-        {ranked.map((s, i) => (
+        {ranked.map((s) => (
           <Card key={s.id} className="supplier-card">
             <CardContent>
               <div className="supplier-card-top">
@@ -281,11 +293,17 @@ export function Suppliers() {
                     ★ {s.rating} · {s.distance} mi away
                   </small>
                 </div>
+                <Chip
+                  size="small"
+                  label={s.available ? 'Available' : 'Paused'}
+                  color={s.available ? 'success' : 'default'}
+                  variant="outlined"
+                />
                 {s.verified && (
                   <Chip size="small" label="Verified" color="success" variant="outlined" />
                 )}
               </div>
-              {i === 0 && <div className="best-match">✳ BEST MATCH</div>}
+              {matches[0]?.id === s.id && <div className="best-match">BEST MATCH</div>}
               <p>{s.services}</p>
               <Divider />
               <div className="supplier-facts">
@@ -296,21 +314,31 @@ export function Suppliers() {
                   AVAILABLE CAPACITY<b>{Number(s.capacity).toLocaleString()} gal</b>
                 </span>
               </div>
-              <Button fullWidth variant="contained" onClick={() => create(s)}>
-                Request delivery · ${(Number(s.price) * gallons).toFixed(2)}
+              <Button
+                fullWidth
+                variant="contained"
+                disabled={!matchIds.has(s.id)}
+                onClick={() => create(s)}
+              >
+                {matchIds.has(s.id)
+                  ? `Request delivery - $${(Number(s.price) * gallons).toFixed(2)}`
+                  : s.available
+                    ? 'Not enough capacity'
+                    : 'Currently unavailable'}
               </Button>
             </CardContent>
           </Card>
         ))}
         {!ranked.length && (
           <Paper className="panel empty-box">
-            No available suppliers can fill {gallons || 0} gallons. Try a smaller delivery size.
+            {data.suppliers.length
+              ? `No suppliers match: ${search}. Try another search.`
+              : 'No suppliers have joined yet. Check back later.'}
           </Paper>
         )}
       </div>
       <p className="algorithm-note">
-        MATCHING ALGORITHM · Available suppliers with enough capacity are ranked by lower price,
-        then shorter distance.
+        Suppliers that can fill your order appear first, ranked by price and distance.
       </p>
     </Page>
   );
@@ -328,7 +356,11 @@ export function NewRequest() {
     e.preventDefault();
     if (!vals.tankId) return setNotice('Please add a tank before requesting a delivery.', 'error');
     const tank = tanks.find((t) => t.id === vals.tankId);
-    if (vals.gallons > tank.capacity)
+    const gallons = Number(vals.gallons);
+    if (!Number.isFinite(gallons) || gallons <= 0)
+      return setNotice('Delivery size must be greater than zero.', 'error');
+    if (!tank) return setNotice('Choose a valid tank for this delivery.', 'error');
+    if (gallons > Number(tank.capacity))
       return setNotice('Delivery size cannot exceed tank capacity.', 'error');
     const target = data.suppliers.find((s) => s.id === supplier);
     const req = {
@@ -336,9 +368,9 @@ export function NewRequest() {
       userId: user.id,
       tankId: tank.id,
       supplierId: target?.id || null,
-      gallons: Number(vals.gallons),
+      gallons,
       urgency: Number(vals.urgency),
-      status: target ? 'Pending' : 'Pending',
+      status: 'Pending',
       createdAt: new Date().toISOString(),
       address: user.address,
     };
@@ -580,13 +612,34 @@ export function Profile({ role }) {
     [available, setAvailable] = useState(sup?.available ?? true);
   const save = (e) => {
     e.preventDefault();
-    patch('users', (xs) => xs.map((x) => (x.id === user.id ? { ...x, ...v } : x)));
-    setUser({ ...user, ...v });
+    const profile = { ...v, email: v.email.trim().toLowerCase() };
+    if (
+      data.users.some(
+        (account) =>
+          account.id !== user.id && account.email?.trim().toLowerCase() === profile.email,
+      )
+    )
+      return setNotice('An account with this email already exists.', 'error');
+    if (role === 'supplier') {
+      if (!Number.isFinite(Number(price)) || Number(price) < 0)
+        return setNotice('Enter a valid price per gallon.', 'error');
+      if (!Number.isFinite(Number(capacity)) || Number(capacity) < 0)
+        return setNotice('Enter a valid available capacity.', 'error');
+    }
+    patch('users', (xs) => xs.map((x) => (x.id === user.id ? { ...x, ...profile } : x)));
+    setUser({ ...user, ...profile });
     if (role === 'supplier')
       patch('suppliers', (xs) =>
         xs.map((x) =>
           x.id === user.id
-            ? { ...x, price: Number(price), capacity: Number(capacity), services, available }
+            ? {
+                ...x,
+                name: profile.name,
+                price: Number(price),
+                capacity: Number(capacity),
+                services,
+                available,
+              }
             : x,
         ),
       );
@@ -604,6 +657,7 @@ export function Profile({ role }) {
               <TextField
                 key={k}
                 label={k[0].toUpperCase() + k.slice(1)}
+                type={k === 'email' ? 'email' : k === 'phone' ? 'tel' : 'text'}
                 value={v[k]}
                 onChange={(e) => setV({ ...v, [k]: e.target.value })}
                 required
@@ -627,9 +681,11 @@ export function Profile({ role }) {
                   label="Available capacity (gallons)"
                   type="number"
                   value={capacity}
+                  inputProps={{ min: 0 }}
                   onChange={(e) => setCapacity(e.target.value)}
                 />
                 <Select
+                  aria-label="Supplier availability"
                   value={available ? 'Available' : 'Unavailable'}
                   onChange={(e) => setAvailable(e.target.value === 'Available')}
                 >

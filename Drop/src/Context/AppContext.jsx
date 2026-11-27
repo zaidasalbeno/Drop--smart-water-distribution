@@ -4,10 +4,18 @@ import { initialData } from '../data';
 export const AppContext = createContext(null);
 const read = () => {
   try {
-    localStorage.removeItem('drop-data-v1');
-    localStorage.removeItem('drop-user-v1');
     const value = localStorage.getItem('drop-data-v2');
-    return value ? { ...initialData, ...JSON.parse(value) } : initialData;
+    const parsed = value ? JSON.parse(value) : {};
+    const saved = parsed && typeof parsed === 'object' ? parsed : {};
+    const users = Array.isArray(saved.users) ? saved.users : initialData.users;
+    const seededAdmin = initialData.users[0];
+    return {
+      ...initialData,
+      ...saved,
+      users: users.some((account) => account.email?.toLowerCase() === seededAdmin.email)
+        ? users
+        : [...users, seededAdmin],
+    };
   } catch {
     return initialData;
   }
@@ -17,7 +25,6 @@ export function Provider({ children }) {
   const [data, setData] = useState(read);
   const [user, setUser] = useState(() => {
     try {
-      localStorage.removeItem('drop-user-v1');
       return JSON.parse(localStorage.getItem('drop-user-v2')) || null;
     } catch {
       return null;
@@ -42,7 +49,8 @@ export function Provider({ children }) {
   const login = (email, password) => {
     const account = data.users.find(
       (item) =>
-        item.email.toLowerCase() === email.trim().toLowerCase() && item.password === password,
+        item.email?.trim().toLowerCase() === email.trim().toLowerCase() &&
+        item.password === password,
     );
     if (!account) return 'Email or password is incorrect. Create an account to get started.';
     if (account.active === false) return 'This account is suspended. Contact an administrator.';
@@ -50,9 +58,10 @@ export function Provider({ children }) {
     return '';
   };
   const register = (form) => {
-    if (data.users.some((item) => item.email.toLowerCase() === form.email.toLowerCase()))
+    const email = form.email.trim().toLowerCase();
+    if (data.users.some((item) => item.email?.trim().toLowerCase() === email))
       return 'An account with this email already exists.';
-    const created = { ...form, id: `u${Date.now()}`, active: true };
+    const created = { ...form, email, id: `u${Date.now()}`, active: true };
     patch('users', (rows) => [...rows, created]);
     if (created.role === 'supplier')
       patch('suppliers', (rows) => [

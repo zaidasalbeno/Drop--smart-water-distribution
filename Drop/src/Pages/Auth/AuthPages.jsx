@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, MenuItem, Paper, Stack, TextField } from '@mui/material';
-import { Link, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import Header from '../../components/Layout/Header';
 import { useApp } from '../../Hooks/useApp';
 const base = { household: '/household', supplier: '/supplier', admin: '/admin' };
@@ -16,6 +16,7 @@ export function Auth({ mode }) {
     role: 'household',
   });
   const nav = useNavigate();
+  const location = useLocation();
   const change = (event) => setForm({ ...form, [event.target.name]: event.target.value });
   const submit = (event) => {
     event.preventDefault();
@@ -31,7 +32,9 @@ export function Auth({ mode }) {
             (account) => account.email.toLowerCase() === form.email.trim().toLowerCase(),
           )
         : form;
-    nav(base[signedIn?.role] || '/household', { replace: true });
+    const destination = location.state?.from;
+    const allowedBase = base[signedIn?.role] || '/household';
+    nav(destination?.startsWith(allowedBase) ? destination : allowedBase, { replace: true });
   };
   return (
     <>
@@ -40,11 +43,11 @@ export function Auth({ mode }) {
         <div className="auth-side">
           <span>DROP · LOCAL ACCOUNT</span>
           <h1>
-            Water is
+            Stay ahead
             <br />
-            better when
+            of your water
             <br />
-            it <em>flows.</em>
+            <em>supply.</em>
           </h1>
           <p>Manage tanks, deliveries, and local water services in one place.</p>
         </div>
@@ -79,7 +82,6 @@ export function Auth({ mode }) {
                   >
                     <MenuItem value="household">Household</MenuItem>
                     <MenuItem value="supplier">Supplier</MenuItem>
-                    <MenuItem value="admin">Admin demo</MenuItem>
                   </TextField>
                   <TextField
                     required
@@ -121,11 +123,22 @@ export function Auth({ mode }) {
           </form>
           {mode === 'login' && (
             <div className="demo-box">
-              <b>NO DEMO ACCOUNTS</b>
-              <span className="no-demo-note">
-                Create an account to add your own local data. Passwords are stored as entered in
-                this browser.
-              </span>
+              <b>ADMIN ACCESS <span>Local demo account</span></b>
+              <button
+                type="button"
+                onClick={() =>
+                  setForm((current) => ({
+                    ...current,
+                    email: 'admin@drop.local',
+                    password: 'DropAdmin2026!',
+                  }))
+                }
+              >
+                <span className="role-dot admin" />
+                <span>DROP administrator<small>Click to fill the admin credentials</small></span>
+                <b>Fill</b>
+              </button>
+              <span className="no-demo-note">Email: admin@drop.local · Password: DropAdmin2026!</span>
             </div>
           )}
           <div className="auth-switch">

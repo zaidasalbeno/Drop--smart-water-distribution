@@ -81,6 +81,7 @@ export function Status({ value }) {
 }
 
 export function DataTable({ headers, children, empty = 'Nothing to show here yet.' }) {
+  const hasRows = Array.isArray(children) ? children.length > 0 : Boolean(children);
   return (
     <div className="table-scroll">
       <table className="data-table">
@@ -92,7 +93,7 @@ export function DataTable({ headers, children, empty = 'Nothing to show here yet
           </tr>
         </thead>
         <tbody>
-          {children || (
+          {hasRows ? children : (
             <tr>
               <td colSpan={headers.length} className="empty">
                 ◌<br />
